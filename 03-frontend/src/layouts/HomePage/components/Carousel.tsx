@@ -1,9 +1,9 @@
+
+
+import bookCover1 from "./../../../Images/BooksImages/book-luv2code-1000.png";
+import bookCover2 from "./../../../Images/BooksImages/new-book-1.png";
+import bookCover3 from "./../../../Images/BooksImages/new-book-2.png";
 import { ReturnBook } from "./ReturnBook";
-
-import bookCover1 from "./../../Images/BooksImages/book-luv2code-1000.png";
-import bookCover2 from "./../../Images/BooksImages/new-book-1.png";
-import bookCover3 from "./../../Images/BooksImages/new-book-2.png";
-
 
 export const Carousel = () => {
   return (
@@ -25,15 +25,23 @@ export const Carousel = () => {
               <ReturnBook
                 imageSrc={bookCover1}
                 title="Crash Course in Python"
-              />
+              />    
+              <ReturnBook
+                imageSrc={bookCover2}
+                title="Advanced Teqchiques in C#"
+              />  
+              <ReturnBook
+                imageSrc={bookCover3}
+                title=" The Expert Guide to Machine Learning"
+              />        
             </div>
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
-              <ReturnBook
+            <ReturnBook
                 imageSrc={bookCover2}
                 title="Advanced Teqchiques in C#"
-              />
+              />  
             </div>
           </div>
           <div className="carousel-item">
@@ -76,10 +84,10 @@ export const Carousel = () => {
 
       {/* Mobile View */}
       <div className="d-lg-none mt-3">
-        <div className="row d-flex justify-content-center align-items-center">
+        {/* <div className="row d-flex justify-content-center align-items-center">
           <div className="text-center">
             <img
-              src={require("./../../Images/BooksImages/book-luv2code-1000.png")}
+              src={require("./../../../Images/BooksImages/book-luv2code-1000.png")}
               alt="Book cover"
               width={151}
               height={233}
@@ -92,7 +100,11 @@ export const Carousel = () => {
               Reserve
             </a>
           </div>
-        </div>
+        </div> */}
+        <ReturnBook
+                imageSrc={bookCover1}
+                title="Crash Course in Python"
+              />    
       </div>
 
       {/* View More Button */}
