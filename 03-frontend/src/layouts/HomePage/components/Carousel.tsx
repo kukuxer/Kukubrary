@@ -1,11 +1,26 @@
-
-
+import { error } from "console";
+import BookModel from "../../../models/BookModel";
 import bookCover1 from "./../../../Images/BooksImages/book-luv2code-1000.png";
 import bookCover2 from "./../../../Images/BooksImages/new-book-1.png";
 import bookCover3 from "./../../../Images/BooksImages/new-book-2.png";
 import { ReturnBook } from "./ReturnBook";
+import { useEffect, useState } from "react";
 
 export const Carousel = () => {
+  const [books, setBooks] = useState<BookModel[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState(null);
+
+  useEffect(() => {
+    const fetchBooks = async() => {
+
+    };
+    fetchBooks().catch((error:any) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    })
+  }, []);
+
   return (
     <div className="container mt-5" style={{ height: 550 }}>
       <div className="homepage-carousel-title">
@@ -25,23 +40,23 @@ export const Carousel = () => {
               <ReturnBook
                 imageSrc={bookCover1}
                 title="Crash Course in Python"
-              />    
+              />
               <ReturnBook
                 imageSrc={bookCover2}
                 title="Advanced Teqchiques in C#"
-              />  
+              />
               <ReturnBook
                 imageSrc={bookCover3}
                 title=" The Expert Guide to Machine Learning"
-              />        
+              />
             </div>
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
-            <ReturnBook
+              <ReturnBook
                 imageSrc={bookCover2}
                 title="Advanced Teqchiques in C#"
-              />  
+              />
             </div>
           </div>
           <div className="carousel-item">
@@ -101,10 +116,7 @@ export const Carousel = () => {
             </a>
           </div>
         </div> */}
-        <ReturnBook
-                imageSrc={bookCover1}
-                title="Crash Course in Python"
-              />    
+        <ReturnBook imageSrc={bookCover1} title="Crash Course in Python" />
       </div>
 
       {/* View More Button */}
