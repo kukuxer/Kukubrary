@@ -1,8 +1,6 @@
-import { error } from "console";
+
 import BookModel from "../../../models/BookModel";
-import bookCover1 from "./../../../Images/BooksImages/book-luv2code-1000.png";
-import bookCover2 from "./../../../Images/BooksImages/new-book-1.png";
-import bookCover3 from "./../../../Images/BooksImages/new-book-2.png";
+import { SpinnerLoading } from "../../Utils/SpinneLoading";
 import { ReturnBook } from "./ReturnBook";
 import { useEffect, useState } from "react";
 
@@ -13,13 +11,56 @@ export const Carousel = () => {
 
   useEffect(() => {
     const fetchBooks = async() => {
+      const loadedBooks: BookModel[] = [];
 
+      const baseUrl: string = "http://localhost:8080/api/books";
+      
+      const url = `${baseUrl}?page=0&size=9`
+
+      const response = await fetch(url);
+
+      if(!response.ok){
+        throw new Error("Something went wrong")
+      }
+
+      const responseJson = await response.json();
+
+      const responseData = responseJson._embedded.books;
+
+      for( const key in responseData){
+        loadedBooks.push({
+          id: responseData[key].id,
+          title: responseData[key].title,
+          author: responseData[key].author,
+          description: responseData[key].description,
+          copies: responseData[key].copies,
+          copiesAvailable: responseData[key].copiesAvailable,
+          category: responseData[key].category,
+          img: responseData[key].img
+        })
+      }
+      setBooks(loadedBooks);
+      setIsLoading(false);
     };
     fetchBooks().catch((error:any) => {
       setIsLoading(false);
       setHttpError(error.message);
     })
   }, []);
+
+if(isLoading){
+  return(
+    <SpinnerLoading/>
+  );
+}
+
+if(httpError){
+  return(
+    <div className="container m-5">
+      <p>{httpError}</p>
+    </div>
+  );
+}
 
   return (
     <div className="container mt-5" style={{ height: 550 }}>
@@ -37,34 +78,23 @@ export const Carousel = () => {
         <div className="carousel-inner">
           <div className="carousel-item active">
             <div className="row d-flex justify-content-center align-items-center">
-              <ReturnBook
-                imageSrc={bookCover1}
-                title="Crash Course in Python"
-              />
-              <ReturnBook
-                imageSrc={bookCover2}
-                title="Advanced Teqchiques in C#"
-              />
-              <ReturnBook
-                imageSrc={bookCover3}
-                title=" The Expert Guide to Machine Learning"
-              />
+              {books.slice(0, 3).map((book) => (
+                <ReturnBook book={book} key={book.id} />
+              ))}
             </div>
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
-              <ReturnBook
-                imageSrc={bookCover2}
-                title="Advanced Teqchiques in C#"
-              />
+              {books.slice(3, 6).map((book) => (
+                <ReturnBook book={book} key={book.id} />
+              ))}
             </div>
           </div>
           <div className="carousel-item">
             <div className="row d-flex justify-content-center align-items-center">
-              <ReturnBook
-                imageSrc={bookCover3}
-                title=" The Expert Guide to Machine Learning"
-              />
+              {books.slice(6, 9).map((book) => (
+                <ReturnBook book={book} key={book.id} />
+              ))}
             </div>
           </div>
         </div>
@@ -99,24 +129,11 @@ export const Carousel = () => {
 
       {/* Mobile View */}
       <div className="d-lg-none mt-3">
-        {/* <div className="row d-flex justify-content-center align-items-center">
-          <div className="text-center">
-            <img
-              src={require("./../../../Images/BooksImages/book-luv2code-1000.png")}
-              alt="Book cover"
-              width={151}
-              height={233}
-            />
-            <h6 className="mt-2">
-              <b>Book</b>
-            </h6>
-            <p>Kukubrary</p>
-            <a className="btn main-color text-white" href="#">
-              Reserve
-            </a>
-          </div>
-        </div> */}
-        <ReturnBook imageSrc={bookCover1} title="Crash Course in Python" />
+        {books[7] ? (
+          <ReturnBook book={books[7]} key={books[7].id} />
+        ) : (
+          <p>No books available for mobile view.</p>
+        )}
       </div>
 
       {/* View More Button */}
