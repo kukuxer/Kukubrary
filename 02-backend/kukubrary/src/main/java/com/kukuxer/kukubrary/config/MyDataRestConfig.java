@@ -1,6 +1,7 @@
 package com.kukuxer.kukubrary.config;
 
 import com.kukuxer.kukubrary.entity.Book;
+import com.kukuxer.kukubrary.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -19,14 +20,16 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
                 HttpMethod.PUT,
                 HttpMethod.PATCH};
         configuration.exposeIdsFor(Book.class);
+        configuration.exposeIdsFor(Review.class);
         disableHHttpMethods(Book.class, configuration,theUnsupportedMethods);
+        disableHHttpMethods(Review.class, configuration,theUnsupportedMethods);
 
 //        configure CORS mapping
         cors.addMapping(configuration.getBasePath()+"/**")
                 .allowedOrigins(theAllowedOrigins);
     }
 
-    private void disableHHttpMethods(Class<Book> bookClass, RepositoryRestConfiguration configuration, HttpMethod[] theUnsupportedMethods) {
+    private void disableHHttpMethods(Class<?> bookClass, RepositoryRestConfiguration configuration, HttpMethod[] theUnsupportedMethods) {
         configuration.getExposureConfiguration()
                 .forDomainType(bookClass)
                 .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedMethods))
