@@ -28,6 +28,12 @@ background-color: #212527 ;
   .main-color .nav-link:hover {
     color: #928f8f !important; /* Slightly lighter on hover */
   }
+
+  .navbar-dark .nav-link.active {
+    color: #f8f9fa; /* Light color for active links */
+    font-weight: bold; /* Optional for better emphasis */
+  }
+  
   
 
 .col-image-left {

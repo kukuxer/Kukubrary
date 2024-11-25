@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import BookModel from "../../../models/BookModel";
 import { SpinnerLoading } from "../../Utils/SpinneLoading";
 import { ReturnBook } from "./ReturnBook";
@@ -138,9 +139,9 @@ if(httpError){
 
       {/* View More Button */}
       <div className="homepage-carousel-title mt-3">
-        <a className="btn btn-outline-dark btn-lg" href="#">
+        <Link className="btn btn-outline-dark btn-lg" to={"/search"}>
           View more
-        </a>
+        </Link>
       </div>
     </div>
   );
