@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BookModel from "../../models/BookModel";
-import { SpinnerLoading } from "../Utils/SpinneLoading";
+import { SpinnerLoading } from "../Utils/SpinnerLoading";
 import { StarsReview } from "../Utils/StarsReview";
 import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
 import ReviewModel from "../../models/ReviewModel";
