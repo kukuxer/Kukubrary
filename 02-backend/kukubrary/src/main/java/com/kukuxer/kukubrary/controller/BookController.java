@@ -1,10 +1,13 @@
 package com.kukuxer.kukubrary.controller;
 
 import com.kukuxer.kukubrary.entity.Book;
+import com.kukuxer.kukubrary.responsemodels.ShelfCurrentLoansResponse;
 import com.kukuxer.kukubrary.service.BookService;
 import com.kukuxer.kukubrary.utils.ExtractJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -35,5 +38,10 @@ public class BookController {
     public int currentLoansCount(@RequestHeader(value = "Authorization")String token){
         String userEmail = ExtractJWT.payloadJWTExtraction(token,"sub");
         return  bookService.currentLoansCount(userEmail);
+    }
+    @GetMapping("/secure/currentLoans")
+    public List<ShelfCurrentLoansResponse> currentLoans(@RequestHeader(value = "Authorization")String token) throws Exception {
+        String userEmail = ExtractJWT.payloadJWTExtraction(token,"sub");
+        return  bookService.currentLoans(userEmail);
     }
 }

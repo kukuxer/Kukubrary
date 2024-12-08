@@ -67,3 +67,36 @@ background-color: #212527 ;
     pointer-events: none;
     cursor: default;
  }
+
+ 
+.custom-back-button {
+  background-color: #040311; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  font-weight: bold;
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  text-align: center; 
+}
+
+/* Anchor tag inside the button */
+.custom-back-button .button-link {
+  color: #ffffff;
+  text-decoration: none; 
+  display: inline-block; 
+  width: 100%; 
+  height: 100%; 
+}
+
+
+.custom-back-button:hover {
+  background-color: #1f1d3b;
+  transform: scale(1.05); 
+}
+
+.custom-back-button:active {
+  background-color: #3b2fad; 
+  transform: scale(0.95); 
+}

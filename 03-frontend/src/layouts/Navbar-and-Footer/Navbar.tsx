@@ -40,17 +40,31 @@ export const Navbar = () => {
                 Search Books
               </NavLink>
             </li>
+            {authState.isAuthenticated && (
+              <li className="nav-item">
+                <NavLink className="nav-link" to={"/shelf"}>Shelf</NavLink>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav ms-auto">
             {!authState.isAuthenticated ? (
               <li className="nav-item m-1">
-                <Link type="button" className="btn btn-outline-light" to={"/login"}>
+                <Link
+                  type="button"
+                  className="btn btn-outline-light"
+                  to={"/login"}
+                >
                   Sign in
                 </Link>
               </li>
             ) : (
-              <li >
-                <a type="button" className="btn btn-outline-light" onClick={handleLogout} href="#">
+              <li>
+                <a
+                  type="button"
+                  className="btn btn-outline-light"
+                  onClick={handleLogout}
+                  href="#"
+                >
                   log out
                 </a>
               </li>

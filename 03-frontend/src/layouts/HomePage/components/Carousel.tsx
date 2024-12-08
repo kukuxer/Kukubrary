@@ -143,6 +143,12 @@ if(httpError){
           View more
         </Link>
       </div>
+      
     </div>
+
+
+///
+
+
   );
 };
