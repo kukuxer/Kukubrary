@@ -1,59 +1,59 @@
 import { useState } from "react";
-import { HistoryPage } from "./components/HistoryPage";
-import { Loans } from "./components/Loans";
+import { PostNewMessage } from "./components/PostNewMessage";
+import { Messages } from "./components/Messages";
 
-export const ShelfPage = () => {
-  const [historyClick, setHistoryClick] = useState(false);
+export const MessagesPage = () => {
+  const [messagesClick, setMessagesClick] = useState(false);
 
   return (
     <div className="container">
-      <div className="mt-3">
+      <div className="mt-3 mb-2">
         <nav>
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
             <button
-              onClick={() => setHistoryClick(false)}
+              onClick={() => setMessagesClick(false)}
               className="nav-link active"
-              id="nav-loans-tab"
+              id="nav-send-message-tab"
               data-bs-toggle="tab"
-              data-bs-target="#nav-loans"
+              data-bs-target="#nav-send-message"
               type="button"
               role="tab"
-              aria-controls="nav-loans"
+              aria-controls="nav-send-message"
               aria-selected="true"
             >
-              Loans
+              Submit Question
             </button>
             <button
-              onClick={() => setHistoryClick(true)}
+              onClick={() => setMessagesClick(true)}
               className="nav-link"
-              id="nav-history-tab"
+              id="nav-message-tab"
               data-bs-toggle="tab"
-              data-bs-target="#nav-history"
+              data-bs-target="#nav-message"
               type="button"
               role="tab"
-              aria-controls="nav-history"
+              aria-controls="nav-message"
               aria-selected="false"
             >
-              Your History
+              Q/A Response/Pending
             </button>
           </div>
         </nav>
         <div className="tab-content" id="nav-tabContent">
           <div
             className="tab-pane fade show active"
-            id="nav-loans"
+            id="nav-send-message"
             role="tabpanel"
-            aria-labelledby="nav-loans-tab"
+            aria-labelledby="nav-send-message-tab"
           >
-            <Loans />
+            <PostNewMessage />
           </div>
           <div
             className="tab-pane fade"
-            id="nav-history"
+            id="nav-message"
             role="tabpanel"
-            aria-labelledby="nav-history-tab"
+            aria-labelledby="nav-message-tab"
           >
-            {historyClick ? <HistoryPage /> : <></>}
+            {messagesClick ? <Messages /> : <></>}
           </div>
         </div>
       </div>

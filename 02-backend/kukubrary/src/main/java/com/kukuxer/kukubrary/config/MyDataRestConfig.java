@@ -1,6 +1,7 @@
 package com.kukuxer.kukubrary.config;
 
 import com.kukuxer.kukubrary.entity.Book;
+import com.kukuxer.kukubrary.entity.Message;
 import com.kukuxer.kukubrary.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -18,9 +19,10 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
                 HttpMethod.DELETE,
                 HttpMethod.POST,
                 HttpMethod.PATCH};
-        configuration.exposeIdsFor(Book.class, Review.class);
+        configuration.exposeIdsFor(Book.class, Review.class, Message.class);
         disableHHttpMethods(Book.class, configuration,theUnsupportedMethods);
         disableHHttpMethods(Review.class, configuration,theUnsupportedMethods);
+        disableHHttpMethods(Message.class, configuration,theUnsupportedMethods);
 
 //        configure CORS mapping
         cors.addMapping("/**")

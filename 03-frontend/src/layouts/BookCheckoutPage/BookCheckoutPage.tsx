@@ -212,7 +212,7 @@ export const BookCheckoutPage = () => {
   async function checkoutBook() {
     const url = `http://localhost:8080/api/books/secure/checkout?bookId=${book?.id}`;
     const requestOptions = {
-          method: "GET",
+          method: "PUT",
           headers: {
             Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
             "Content-Type": "application/json",

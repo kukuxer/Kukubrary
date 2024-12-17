@@ -2,8 +2,10 @@ package com.kukuxer.kukubrary.service;
 
 import com.kukuxer.kukubrary.dao.BookRepository;
 import com.kukuxer.kukubrary.dao.CheckoutRepository;
+import com.kukuxer.kukubrary.dao.HistoryRepository;
 import com.kukuxer.kukubrary.entity.Book;
 import com.kukuxer.kukubrary.entity.Checkout;
+import com.kukuxer.kukubrary.entity.History;
 import com.kukuxer.kukubrary.responsemodels.ShelfCurrentLoansResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +22,15 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class BookService {
 
-    private BookRepository bookRepository;
-    private CheckoutRepository checkoutRepository;
+    private final BookRepository bookRepository;
+    private final CheckoutRepository checkoutRepository;
 
-    public BookService(BookRepository bookRepository, CheckoutRepository checkoutRepository) {
+    private HistoryRepository historyRepository;
+
+    public BookService(BookRepository bookRepository,HistoryRepository historyRepository, CheckoutRepository checkoutRepository) {
         this.bookRepository = bookRepository;
         this.checkoutRepository = checkoutRepository;
+        this.historyRepository = historyRepository;
     }
 
     public Book checkoutBook(String userEmail, Long bookId) throws Exception {
@@ -54,20 +59,19 @@ public class BookService {
 
     public Boolean checkoutBookByUser(String userEmail, Long bookId) {
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
-        if (validateCheckout != null) return true;
-        else return false;
+        return validateCheckout != null;
     }
 
-    public  int currentLoansCount(String userEmail){
-        return  checkoutRepository.findBooksByUserEmail(userEmail).size();
+    public int currentLoansCount(String userEmail) {
+        return checkoutRepository.findBooksByUserEmail(userEmail).size();
     }
 
-    public List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws  Exception{
+    public List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws Exception {
         List<ShelfCurrentLoansResponse> shelfCurrentLoansResponses = new ArrayList<>();
         List<Checkout> checkoutList = checkoutRepository.findBooksByUserEmail(userEmail);
         List<Long> bookIdList = new ArrayList<>();
 
-        for(Checkout i: checkoutList){
+        for (Checkout i : checkoutList) {
             bookIdList.add(i.getBookId());
         }
 
@@ -75,7 +79,7 @@ public class BookService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        for(Book book: books){
+        for (Book book : books) {
             Optional<Checkout> checkout = checkoutList.stream()
                     .filter(x -> x.getBookId().equals(book.getId())).findFirst();
 
@@ -84,13 +88,52 @@ public class BookService {
 
             TimeUnit time = TimeUnit.DAYS;
 
-            long difference_In_Time = time.convert(d1.getTime() - d2.getTime(),TimeUnit.MILLISECONDS);
+            long difference_In_Time = time.convert(d1.getTime() - d2.getTime(), TimeUnit.MILLISECONDS);
 
-            shelfCurrentLoansResponses.add(new ShelfCurrentLoansResponse(book,(int)difference_In_Time));
+            shelfCurrentLoansResponses.add(new ShelfCurrentLoansResponse(book, (int) difference_In_Time));
 
         }
 
-        return  shelfCurrentLoansResponses;
+        return shelfCurrentLoansResponses;
+    }
+
+    public void returnBook(String userEmail, Long bookId) throws Exception {
+        Optional<Book> book = bookRepository.findById(bookId);
+
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+
+        if (book.isEmpty() || validateCheckout == null) {
+            throw new Exception("Book does not exist or not checked out by user");
+        }
+        book.get().setCopiesAvailable(book.get().getCopiesAvailable() + 1);
+
+        bookRepository.save((book.get()));
+        checkoutRepository.deleteById(validateCheckout.getId());
+
+        History history = new History(userEmail,
+                validateCheckout.getCheckoutDate(),
+                LocalDate.now().toString(),
+                book.get().getTitle(),
+                book.get().getAuthor(),
+                book.get().getDescription(),
+                book.get().getImg());
+        historyRepository.save(history);
+    }
+    public  void renewLoan(String userEmail,Long bookId) throws  Exception {
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail,bookId);
+
+        if(validateCheckout == null){
+            throw  new Exception("Book does not exist or not checked out by user");
+        }
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date d1 = sdFormat.parse(validateCheckout.getReturnDate());
+        Date d2 = sdFormat.parse(LocalDate.now().toString());
+
+        if(d1.compareTo(d2) > 0 || d1.compareTo(d2) == 0){
+            validateCheckout.setReturnDate(LocalDate.now().plusDays(7).toString());
+            checkoutRepository.save(validateCheckout);
+        }
     }
 
 }
