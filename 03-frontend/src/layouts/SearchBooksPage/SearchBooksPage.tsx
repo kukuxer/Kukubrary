@@ -20,7 +20,7 @@ export const SearchBooksPage = () => {
     const fetchBooks = async () => {
       const loadedBooks: BookModel[] = [];
 
-      const baseUrl: string = "http://localhost:8080/api/books";
+      const baseUrl: string = `${process.env.REACT_APP_API}/books`;
 
       let url: string = ``;
 

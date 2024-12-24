@@ -8,7 +8,7 @@ import com.nimbusds.jose.crypto.impl.XC20P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://localhost:3000")
 @RequestMapping("/api/reviews")
 public class ReviewController {
 

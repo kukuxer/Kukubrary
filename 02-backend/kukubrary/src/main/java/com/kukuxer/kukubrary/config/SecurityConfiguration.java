@@ -26,7 +26,7 @@ public class SecurityConfiguration {
 
         // Protect endpoints at /api/<type>/secure
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/books/secure/**","/api/reviews/secure/**","/api/messages/secure/**").authenticated()
+                .requestMatchers("/api/books/secure/**","/api/reviews/secure/**","/api/messages/secure/**","/api/admin/secure/**").authenticated()
                 .anyRequest().permitAll()
         );
 
@@ -52,7 +52,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("https://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

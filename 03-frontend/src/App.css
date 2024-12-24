@@ -17,12 +17,17 @@
     height: 100%;
   }
 
+  button.main-color:hover, .btn.main-color:hover {
+    background-color: #afa9a9 !important;
+   
+}
+
 .main-color {
 background-color: #212527 ;
 }
 
 .main-color .nav-link {
-    color: #f1f1f1 !important; /* Light color for contrast */
+    color: #f1eeee !important; /* Light color for contrast */
   }
   
   .main-color .nav-link:hover {
@@ -100,3 +105,4 @@ background-color: #212527 ;
   background-color: #3b2fad; 
   transform: scale(0.95); 
 }
+

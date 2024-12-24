@@ -34,12 +34,16 @@ export const BookCheckoutPage = () => {
   const [isCheckedOut, setIsCheckedOut] = useState(false);
   const [isLoadingBookCheckedOut, setIsLoadingBookCheckedOut] = useState(true);
 
+  //Payment 
+  const [displayError, setDisplayError] = useState(false);
+
+
   const bookId = window.location.pathname.split("/")[2];
 
   // fetch books
   useEffect(() => {
     const fetchBooks = async () => {
-      const baseUrl: string = `http://localhost:8080/api/books/${bookId}`;
+      const baseUrl: string = `${process.env.REACT_APP_API}/books/${bookId}`;
 
       const response = await fetch(baseUrl);
 
@@ -70,7 +74,7 @@ export const BookCheckoutPage = () => {
   // fetch books reviews
   useEffect(() => {
     const fetchBookReviews = async () => {
-      const reviewUrl: string = `http://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}`;
+      const reviewUrl: string = `${process.env.REACT_APP_API}/reviews/search/findByBookId?bookId=${bookId}`;
       const responseReviews = await fetch(reviewUrl);
 
       if (!responseReviews.ok) {
@@ -112,7 +116,7 @@ export const BookCheckoutPage = () => {
   useEffect(() => {
     const fetchUserReviewBook = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/reviews/secure/user/book?bookId=${bookId}`;
+        const url = `${process.env.REACT_APP_API}/reviews/secure/user/book?bookId=${bookId}`;
         const requestOptions = {
           method: "GET",
           headers: {
@@ -139,7 +143,7 @@ export const BookCheckoutPage = () => {
   useEffect(() => {
     const fetchUserCurrentLoansCount = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/books/secure/currentLoans/count`;
+        const url = `${process.env.REACT_APP_API}/books/secure/currentLoans/count`;
         console.log("Auth Token:", authState?.accessToken?.accessToken);
         const requestOptions = {
           method: "GET",
@@ -167,7 +171,7 @@ export const BookCheckoutPage = () => {
   useEffect(() => {
     const fetchUserCheckedOutBook = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/books/secure/ischeckedout/byuser?bookId=${bookId}`;
+        const url = `${process.env.REACT_APP_API}/books/secure/ischeckedout/byuser?bookId=${bookId}`;
         const requestOptions = {
           method: "GET",
           headers: {
@@ -210,7 +214,7 @@ export const BookCheckoutPage = () => {
   }
 
   async function checkoutBook() {
-    const url = `http://localhost:8080/api/books/secure/checkout?bookId=${book?.id}`;
+    const url = `${process.env.REACT_APP_API}/books/secure/checkout?bookId=${book?.id}`;
     const requestOptions = {
           method: "PUT",
           headers: {
@@ -220,8 +224,11 @@ export const BookCheckoutPage = () => {
         };
     const checkoutResponse = await fetch(url, requestOptions);
     if (!checkoutResponse.ok) {
-      throw new Error("Something went wrong");
+      setDisplayError(true);
+      // throw new Error("Something went wrong");
+      return;
     }
+    setDisplayError(false);
     setIsCheckedOut(true);
   }
 
@@ -231,7 +238,7 @@ export const BookCheckoutPage = () => {
       bookId = book.id;
     }
     const reviewRequestModel = new ReviewRequestModel(starInput,bookId,reviewDescription);
-    const url = `http://localhost:8080/api/reviews/secure`;
+    const url = `${process.env.REACT_APP_API}/reviews/secure`;
     const requestOptions = {
       method: "POST",
       headers: {
@@ -251,6 +258,11 @@ export const BookCheckoutPage = () => {
   return (
     <div>
       <div className="container d-none d-lg-block">
+        {displayError && (
+          <div className="alert alert-danger mt-3" role="alert">
+            You have to return a late book before checking out another one!
+          </div>
+        )}
         <div className="row mt-5">
           <div className="col-sm-2 col-md-2">
             {book?.img ? (
@@ -292,6 +304,11 @@ export const BookCheckoutPage = () => {
         <LatestReviews reviews={reviews} bookId={book?.id} mobile={false} />
       </div>
       <div className="container d-lg-none mt-5">
+      {displayError && (
+          <div className="alert alert-danger mt-3" role="alert">
+            You have to return a late book before checking out another one!
+          </div>
+        )}
         <div className="d-flex justify-content-center align-items-center">
           {book?.img ? (
             <img src={book?.img} width={226} height={349} alt="Book" />
